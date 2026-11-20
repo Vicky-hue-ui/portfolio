@@ -10,7 +10,8 @@ export default {
       fontFamily: {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
         sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Syne"', '"Space Grotesk"', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Outfit"', 'system-ui', 'sans-serif'],
+        brand: ['"Outfit"', '"Plus Jakarta Sans"', '"Space Grotesk"', 'system-ui', 'sans-serif'],
       },
       colors: {
         cyber: {

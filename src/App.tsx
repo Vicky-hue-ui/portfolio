@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Preloader } from './components/Preloader';
 import { Navbar } from './components/Navbar';
@@ -15,19 +15,8 @@ import { sound } from './utils/sound';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
-
-  // Check system prefers-reduced-motion
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (mediaQuery.matches) {
-        setReducedMotion(true);
-      }
-    }
-  }, []);
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
@@ -58,15 +47,10 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleToggleReducedMotion = () => {
-    setReducedMotion(!reducedMotion);
-    triggerToast(!reducedMotion ? 'Switched to 2D High-Efficiency Mode' : 'Switched to 3D WebGL Mode');
-  };
-
   return (
-    <div className="min-h-screen bg-[#08080a] text-[#ededf2] selection:bg-[#00f0ff] selection:text-[#08080a] relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#08080a] text-[#ededf2] selection:bg-[#00f0ff] selection:text-[#08080a] relative overflow-x-hidden font-sans">
       
-      {/* 0-100% Preloader Inspired by Adrien Quechon */}
+      {/* Preloader */}
       {isLoading && (
         <Preloader onComplete={() => setIsLoading(false)} />
       )}
@@ -75,16 +59,12 @@ export const App: React.FC = () => {
       <div className={`transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         
         {/* Navigation Bar */}
-        <Navbar
-          reducedMotion={reducedMotion}
-          onToggleReducedMotion={handleToggleReducedMotion}
-        />
+        <Navbar />
 
         {/* Main Content Sections */}
         <main>
-          {/* Hero Section with Interactive 3D Canvas & Avatar */}
+          {/* Hero Section */}
           <HeroSection
-            reducedMotion={reducedMotion}
             onCopyEmail={handleCopyEmail}
             isCopied={isCopied}
           />

@@ -18,14 +18,10 @@ export const Footer: React.FC = () => {
           {/* Col 1: Identity */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#282836]">
-                <img
-                  src={PERSONAL_INFO.photoUrl}
-                  alt="Vicky Samal"
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-8 h-8 rounded-lg bg-[#111116] border border-[#282836] flex items-center justify-center text-xs font-bold text-[#00f0ff]">
+                ‹VS/›
               </div>
-              <span className="text-white font-bold text-sm block font-sans">
+              <span className="text-white font-bold text-sm block font-brand">
                 {PERSONAL_INFO.name}
               </span>
             </div>
@@ -111,7 +107,7 @@ export const Footer: React.FC = () => {
             © {new Date().getFullYear()} Vicky Samal. All rights reserved.
           </div>
           <div className="flex items-center gap-3">
-            <span>Designed with editorial brutalism & 3D WebGL</span>
+            <span>Designed with editorial brutalism & fluid motion</span>
             <span>•</span>
             <span className="text-[#00f0ff]">Adrien Quechon Inspired</span>
           </div>

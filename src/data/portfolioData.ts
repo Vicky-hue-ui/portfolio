@@ -78,19 +78,19 @@ export const PROJECTS: Project[] = [
     ]
   },
   {
-    id: "portfolio-3d",
-    title: "Personal 3D Portfolio Website",
-    tagline: "High-Performance Interactive 3D Portfolio with WebGL & Editorial Motion",
-    description: "Adrien Quechon-inspired creative developer portfolio featuring Three.js 3D hero stage with custom holographic avatar core, 0-100% preloader, binary terminal accents, audio feedback, and full mobile optimization.",
+    id: "portfolio-web",
+    title: "Personal Portfolio Website",
+    tagline: "High-Performance Interactive Portfolio with Editorial Motion & Fluid Micro-Interactions",
+    description: "Adrien Quechon-inspired creative developer portfolio featuring responsive editorial typography, 0-100% diagnostic preloader, binary accents, audio feedback, and direct Gmail dispatch.",
     category: "Frontend & APIs",
-    tags: ["React.js", "Three.js", "TypeScript", "Tailwind CSS", "WebGL", "Vite"],
-    metrics: "60 FPS WebGL rendering with automated low-DPR mobile throttling & 2D fallback",
+    tags: ["React.js", "TypeScript", "Tailwind CSS", "Vite", "Web Audio API"],
+    metrics: "Sub-second load times with modular code-splitting & 100% responsive fluid layout",
     githubUrl: "https://github.com/Vicky-hue-ui",
     liveUrl: "https://github.com/Vicky-hue-ui",
     featured: true,
     highlights: [
-      "Designed interactive 3D WebGL core with pointer parallax, holographic avatar mesh, and touch drag support",
-      "Built lightweight mode toggle ensuring high accessibility on battery-saver and low-spec devices",
+      "Engineered fluid responsive layouts, interactive sound synthesis, and accessible dark-mode architecture",
+      "Built ultra-fast initial load times with Vite, modular React components, and zero layout shift",
       "Integrated live Bengaluru IST clock badge, one-click email copy with confetti, and direct Gmail compose"
     ]
   },

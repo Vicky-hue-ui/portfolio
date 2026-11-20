@@ -1,17 +1,14 @@
 import React from 'react';
 import { ArrowDownRight, Github, Mail, Phone, MapPin, Code2, Copy, Check, Send } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
-import { Hero3DCanvas } from './Hero3DCanvas';
 import { sound } from '../utils/sound';
 
 interface HeroSectionProps {
-  reducedMotion: boolean;
   onCopyEmail: () => void;
   isCopied: boolean;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  reducedMotion,
   onCopyEmail,
   isCopied
 }) => {
@@ -21,22 +18,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <section className="relative min-h-[92vh] pt-28 pb-16 flex flex-col justify-center items-center overflow-hidden">
-      {/* Three.js Ambient 3D Geometric WebGL Background */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
-        <Hero3DCanvas reducedMotion={reducedMotion} />
-      </div>
-
-      {/* Ambient radial gradients & subtle grid */}
+    <section className="relative min-h-[90vh] pt-32 pb-16 flex flex-col justify-center items-center overflow-hidden">
+      {/* Subtle modern ambient background gradients */}
       <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none z-0" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-radial-gradient pointer-events-none z-0" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-radial-gradient pointer-events-none z-0" />
 
       {/* Main Centered Content Container */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col items-center text-center gap-6">
         
         {/* Top System Tag Pill */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs text-zinc-400">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111116]/90 border border-[#23232e] text-[#00f0ff] font-semibold shadow-sm backdrop-blur-sm">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111116] border border-[#23232e] text-[#00f0ff] font-semibold shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#0df2c9] animate-pulse" />
             <Code2 className="w-3.5 h-3.5 text-[#0df2c9]" />
             <span>‹HI/› VICKY SAMAL</span>
@@ -52,15 +44,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </span>
         </div>
 
-        {/* Massive Bold Centered Display Headline */}
+        {/* New Typography for Name: Crisp, Bold, Modern (Outfit / Plus Jakarta Sans) */}
         <div className="flex flex-col items-center gap-2">
-          <h1 className="text-5xl sm:text-7xl md:text-8xl xl:text-9xl font-black font-display tracking-tight text-white leading-[1.05] text-center">
+          <h1 className="text-5xl sm:text-7xl md:text-8xl xl:text-9xl font-black font-brand tracking-tight text-white leading-[1.05] text-center uppercase">
             VICKY{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#0df2c9] to-[#38bdf8]">
               SAMAL
             </span>
           </h1>
-          <p className="font-mono text-sm sm:text-lg md:text-xl text-zinc-300 tracking-wide mt-2 text-center">
+          <p className="font-mono text-sm sm:text-base md:text-lg text-zinc-300 tracking-wide mt-2 text-center">
             Software Developer <span className="text-[#00f0ff]">|</span> Full-Stack MERN <span className="text-[#0df2c9]">|</span> Machine Learning
           </p>
         </div>
@@ -71,7 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </p>
 
         {/* Centered Shift Availability Callout Badge */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#111116]/90 border border-[#23232e] max-w-xl w-full mx-auto flex items-start gap-3.5 text-xs font-mono shadow-xl backdrop-blur-md text-left">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#111116] border border-[#23232e] max-w-xl w-full mx-auto flex items-start gap-3.5 text-xs font-mono shadow-xl text-left">
           <div className="w-2.5 h-2.5 rounded-full bg-[#0df2c9] mt-1 shrink-0 animate-pulse" />
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2">
