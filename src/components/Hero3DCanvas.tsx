@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { Sparkles, Eye, RotateCw } from 'lucide-react';
+import { Eye, RotateCw } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface Hero3DCanvasProps {
   reducedMotion: boolean;
@@ -14,7 +15,6 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
   const [activeInteraction, setActiveInteraction] = useState(false);
 
   useEffect(() => {
-    // If reducedMotion is toggled on, skip WebGL creation to save battery & GPU
     if (reducedMotion) return;
 
     const currentMount = mountRef.current;
@@ -35,13 +35,13 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
 
     // Three.js Scene Setup
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x08080a, 0.04);
+    scene.fog = new THREE.FogExp2(0x08080a, 0.035);
 
     const width = currentMount.clientWidth;
     const height = currentMount.clientHeight;
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.z = 7;
+    camera.position.z = 6.8;
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -50,7 +50,6 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
         alpha: true,
         powerPreference: 'high-performance'
       });
-      // Clamp pixel ratio on mobile to 1.5 to guarantee 60fps
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
       renderer.setSize(width, height);
       renderer.setClearColor(0x000000, 0);
@@ -60,53 +59,89 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
       return;
     }
 
-    // Geometry 1: Core Polyhedron (MERN & ML Quantum Node)
-    const coreGeo = new THREE.IcosahedronGeometry(1.8, 1);
-    const coreMaterial = new THREE.MeshStandardMaterial({
-      color: 0x111625,
-      emissive: 0x00283a,
-      roughness: 0.25,
-      metalness: 0.85,
-      wireframe: wireframeMode
-    });
-    const coreMesh = new THREE.Mesh(coreGeo, coreMaterial);
-    scene.add(coreMesh);
+    // Group to hold the central avatar & node mesh
+    const coreGroup = new THREE.Group();
+    scene.add(coreGroup);
 
-    // Geometry 2: Outer Wireframe Cage (Adrien Quechon brutalist wireframe)
-    const wireGeo = new THREE.IcosahedronGeometry(2.1, 1);
-    const wireMaterial = new THREE.MeshBasicMaterial({
+    // 1. Vicky Samal Avatar Medallion (Circular Texture Plane)
+    const textureLoader = new THREE.TextureLoader();
+    const avatarTexture = textureLoader.load(PERSONAL_INFO.photoUrl);
+    avatarTexture.generateMipmaps = true;
+    avatarTexture.minFilter = THREE.LinearMipmapLinearFilter;
+
+    // Front Avatar Face
+    const avatarGeo = new THREE.CircleGeometry(1.35, 64);
+    const avatarMaterial = new THREE.MeshBasicMaterial({
+      map: avatarTexture,
+      side: THREE.FrontSide
+    });
+    const avatarMesh = new THREE.Mesh(avatarGeo, avatarMaterial);
+    coreGroup.add(avatarMesh);
+
+    // Back Plate of the Medallion (Dark tech carbon backing)
+    const backMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0f1118,
+      metalness: 0.9,
+      roughness: 0.2,
+      side: THREE.BackSide
+    });
+    const backMesh = new THREE.Mesh(avatarGeo, backMaterial);
+    coreGroup.add(backMesh);
+
+    // Glowing Cyan Bezel Ring around the photo
+    const bezelGeo = new THREE.RingGeometry(1.35, 1.45, 64);
+    const bezelMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00f0ff,
+      side: THREE.DoubleSide
+    });
+    const bezelMesh = new THREE.Mesh(bezelGeo, bezelMaterial);
+    coreGroup.add(bezelMesh);
+
+    // Outer Neon Emerald Accent Ring
+    const outerRingGeo = new THREE.RingGeometry(1.5, 1.54, 64);
+    const outerRingMat = new THREE.MeshBasicMaterial({
+      color: 0x0df2c9,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.7
+    });
+    const outerRingMesh = new THREE.Mesh(outerRingGeo, outerRingMat);
+    coreGroup.add(outerRingMesh);
+
+    // 2. Outer Wireframe Icosahedron Node Mesh (Enclosing Cage)
+    const cageGeo = new THREE.IcosahedronGeometry(2.35, 1);
+    const cageMaterial = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       wireframe: true,
       transparent: true,
-      opacity: 0.4
+      opacity: wireframeMode ? 0.75 : 0.35
     });
-    const wireMesh = new THREE.Mesh(wireGeo, wireMaterial);
-    scene.add(wireMesh);
+    const cageMesh = new THREE.Mesh(cageGeo, cageMaterial);
+    scene.add(cageMesh);
 
-    // Geometry 3: Tech Orbit Ring 1 (MERN Orbit)
-    const ringGeo1 = new THREE.TorusGeometry(2.8, 0.02, 16, 100);
+    // 3. Orbiting Tech Rings (MERN Orbit & ML Orbit)
+    const ringGeo1 = new THREE.TorusGeometry(3.0, 0.02, 16, 100);
     const ringMat1 = new THREE.MeshBasicMaterial({
       color: 0x0df2c9,
       transparent: true,
-      opacity: 0.6
+      opacity: 0.65
     });
     const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
     ring1.rotation.x = Math.PI / 3;
     scene.add(ring1);
 
-    // Geometry 4: Tech Orbit Ring 2 (Machine Learning Orbit)
-    const ringGeo2 = new THREE.TorusGeometry(3.3, 0.015, 16, 100);
+    const ringGeo2 = new THREE.TorusGeometry(3.5, 0.015, 16, 100);
     const ringMat2 = new THREE.MeshBasicMaterial({
       color: 0x38bdf8,
       transparent: true,
-      opacity: 0.4
+      opacity: 0.45
     });
     const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
     ring2.rotation.y = Math.PI / 4;
     scene.add(ring2);
 
-    // Geometry 5: Floating Binary & Star Particles
-    const particleCount = window.innerWidth < 768 ? 140 : 280;
+    // 4. Floating Binary & Star Dust Particles
+    const particleCount = window.innerWidth < 768 ? 160 : 300;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -129,23 +164,23 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
     particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMat = new THREE.PointsMaterial({
-      size: 0.05,
+      size: 0.045,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.8
     });
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
     scene.add(ambientLight);
 
     const pointLight1 = new THREE.PointLight(0x00f0ff, 3, 20);
     pointLight1.position.set(5, 5, 5);
     scene.add(pointLight1);
 
-    const pointLight2 = new THREE.PointLight(0x0df2c9, 2, 20);
+    const pointLight2 = new THREE.PointLight(0x0df2c9, 2.5, 20);
     pointLight2.position.set(-5, -4, 4);
     scene.add(pointLight2);
 
@@ -161,8 +196,8 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
 
-      targetRotationY = x * 0.8;
-      targetRotationX = -y * 0.6;
+      targetRotationY = x * 0.75;
+      targetRotationX = -y * 0.55;
     };
 
     const handleTouchStart = (e: TouchEvent) => {
@@ -215,18 +250,25 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth dampening towards target mouse/touch rotation
-      coreMesh.rotation.y += (targetRotationY - coreMesh.rotation.y) * 0.05 + 0.003;
-      coreMesh.rotation.x += (targetRotationX - coreMesh.rotation.x) * 0.05 + 0.002;
+      // Smooth dampening towards target rotation
+      coreGroup.rotation.y += (targetRotationY - coreGroup.rotation.y) * 0.05;
+      coreGroup.rotation.x += (targetRotationX - coreGroup.rotation.x) * 0.05;
+      coreGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.1;
 
-      wireMesh.rotation.y = -coreMesh.rotation.y * 0.8;
-      wireMesh.rotation.x = coreMesh.rotation.x * 0.7;
+      // Outer wireframe cage rotates independently around Vicky's avatar
+      cageMesh.rotation.y = elapsedTime * 0.25;
+      cageMesh.rotation.x = Math.sin(elapsedTime * 0.2) * 0.3;
 
-      ring1.rotation.z = elapsedTime * 0.2;
-      ring2.rotation.z = -elapsedTime * 0.15;
+      // Orbiting rings
+      ring1.rotation.z = elapsedTime * 0.22;
+      ring2.rotation.z = -elapsedTime * 0.18;
 
-      particles.rotation.y = elapsedTime * 0.03;
-      particles.rotation.x = Math.sin(elapsedTime * 0.1) * 0.1;
+      // Pulsing outer ring
+      outerRingMesh.rotation.z = -elapsedTime * 0.3;
+
+      // Particles gentle drift
+      particles.rotation.y = elapsedTime * 0.025;
+      particles.rotation.x = Math.sin(elapsedTime * 0.1) * 0.08;
 
       renderer.render(scene, camera);
     };
@@ -246,49 +288,60 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
           currentMount.removeChild(renderer.domElement);
         }
       }
-      coreGeo.dispose();
-      coreMaterial.dispose();
-      wireGeo.dispose();
-      wireMaterial.dispose();
+      avatarGeo.dispose();
+      avatarMaterial.dispose();
+      backMaterial.dispose();
+      bezelGeo.dispose();
+      bezelMaterial.dispose();
+      outerRingGeo.dispose();
+      outerRingMat.dispose();
+      cageGeo.dispose();
+      cageMaterial.dispose();
       ringGeo1.dispose();
       ringMat1.dispose();
       ringGeo2.dispose();
       ringMat2.dispose();
       particleGeo.dispose();
       particleMat.dispose();
+      avatarTexture.dispose();
       renderer.dispose();
     };
   }, [reducedMotion, wireframeMode]);
 
   return (
-    <div className="relative w-full h-[360px] sm:h-[450px] lg:h-[550px] flex items-center justify-center select-none overflow-hidden">
+    <div className="relative w-full h-[360px] sm:h-[450px] lg:h-[540px] flex items-center justify-center select-none overflow-hidden">
       {/* 3D WebGL Canvas Mount Container */}
       {!reducedMotion && webglSupported ? (
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
       ) : (
-        /* 2D Fallback / High-Efficiency Mode */
-        <div className="relative w-full h-full flex items-center justify-center p-8">
+        /* 2D Fallback / High-Efficiency Mode with Vicky's Image */
+        <div className="relative w-full h-full flex items-center justify-center p-6">
           <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
-            {/* Concentric Pulsing SVG rings */}
+            {/* Animated neon circles */}
             <div className="absolute inset-0 rounded-full border border-[#00f0ff]/30 animate-ping opacity-30" />
-            <div className="absolute inset-4 rounded-full border border-[#0df2c9]/40 animate-spin-slow" />
-            <div className="absolute inset-10 rounded-full border border-dashed border-[#38bdf8]/50 animate-spin" />
+            <div className="absolute inset-2 rounded-full border border-[#0df2c9]/40 animate-spin-slow" />
+            <div className="absolute inset-6 rounded-full border border-dashed border-[#38bdf8]/50 animate-spin" />
             
-            {/* Center Core */}
-            <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-[#111116] via-[#1a1a24] to-[#0d0d12] border-2 border-[#00f0ff] glow-cyan flex flex-col items-center justify-center text-center p-3">
-              <span className="text-xs font-mono text-[#00f0ff] font-bold tracking-wider">VS.CORE</span>
-              <span className="text-[10px] font-mono text-zinc-400 mt-1">2D LITE MODE</span>
-              <span className="text-[9px] text-[#0df2c9] mt-2 font-mono">MERN + ML</span>
+            {/* Center Avatar with Cyber Bezel */}
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-full p-1.5 bg-gradient-to-tr from-[#00f0ff] via-[#0df2c9] to-[#38bdf8] shadow-[0_0_35px_-5px_rgba(0,240,255,0.4)]">
+              <img
+                src={PERSONAL_INFO.photoUrl}
+                alt="Vicky Samal"
+                className="w-full h-full object-cover rounded-full border-2 border-[#08080a]"
+              />
+              <div className="absolute bottom-1 right-2 px-2.5 py-0.5 rounded-full bg-[#08080a]/90 border border-[#0df2c9] text-[10px] font-mono text-[#0df2c9] font-bold">
+                ● ACTIVE
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Floating 3D Micro Controls (Adrien Quechon interactive pill) */}
+      {/* Floating 3D Micro Controls */}
       <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-6 z-20 flex items-center justify-between sm:justify-end gap-2 text-xs font-mono">
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111116]/80 backdrop-blur-md border border-[#23232e] text-zinc-400 text-[11px]">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111116]/90 backdrop-blur-md border border-[#23232e] text-zinc-400 text-[11px] shadow-lg">
           <span className="w-2 h-2 rounded-full bg-[#0df2c9] animate-pulse" />
-          <span className="hidden sm:inline">WebGL 3D Core:</span>
+          <span className="hidden sm:inline">Avatar Node Mesh:</span>
           <span className="text-zinc-200">
             {reducedMotion ? '2D Fallback' : activeInteraction ? 'Active Drag' : 'Tracking Cursor'}
           </span>
@@ -300,11 +353,11 @@ export const Hero3DCanvas: React.FC<Hero3DCanvasProps> = ({ reducedMotion }) => 
               sound.playClick(850);
               setWireframeMode(!wireframeMode);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111116]/90 backdrop-blur-md border border-[#23232e] hover:border-[#00f0ff] text-zinc-300 hover:text-[#00f0ff] transition-colors text-[11px]"
-            title="Toggle Wireframe Architecture"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111116]/90 backdrop-blur-md border border-[#23232e] hover:border-[#00f0ff] text-zinc-300 hover:text-[#00f0ff] transition-colors text-[11px] shadow-lg"
+            title="Toggle Cage Wireframe Intensity"
           >
             {wireframeMode ? <Eye className="w-3.5 h-3.5 text-[#00f0ff]" /> : <RotateCw className="w-3.5 h-3.5 text-[#0df2c9]" />}
-            <span>{wireframeMode ? 'Shaded' : 'Wireframe'}</span>
+            <span>{wireframeMode ? 'Light Cage' : 'Bold Cage'}</span>
           </button>
         )}
       </div>

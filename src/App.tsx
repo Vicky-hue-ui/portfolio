@@ -10,14 +10,12 @@ import { ExperienceEducationSection } from './components/ExperienceEducationSect
 import { SkillsMatrixSection } from './components/SkillsMatrixSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { InteractiveTerminal } from './components/InteractiveTerminal';
 import { PERSONAL_INFO } from './data/portfolioData';
 import { sound } from './utils/sound';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -31,23 +29,6 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  // Global Keyboard Shortcuts (Cmd+K / Ctrl+K for Terminal)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        sound.playClick();
-        setIsTerminalOpen((prev) => !prev);
-      }
-      if (e.key === 'Escape') {
-        setIsTerminalOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
@@ -59,13 +40,13 @@ export const App: React.FC = () => {
       setIsCopied(true);
       triggerToast(`✓ Copied ${PERSONAL_INFO.email} to clipboard!`);
       
-      // Fire subtle celebratory cyber confetti
+      // Fire celebratory cyber confetti
       try {
         confetti({
           particleCount: 50,
           spread: 60,
           origin: { y: 0.8 },
-          colors: ['#00f0ff', '#0df2c9', '#38bdf8', '#ffffff']
+          colors: ['#00f0ff', '#0df2c9', '#EA4335', '#ffffff']
         });
       } catch {
         // ignore
@@ -97,16 +78,15 @@ export const App: React.FC = () => {
         <Navbar
           reducedMotion={reducedMotion}
           onToggleReducedMotion={handleToggleReducedMotion}
-          onOpenTerminal={() => setIsTerminalOpen(true)}
         />
 
         {/* Main Content Sections */}
         <main>
-          {/* Hero Section with Interactive 3D Canvas */}
+          {/* Hero Section with Interactive 3D Canvas & Avatar */}
           <HeroSection
             reducedMotion={reducedMotion}
-            onOpenTerminal={() => setIsTerminalOpen(true)}
             onCopyEmail={handleCopyEmail}
+            isCopied={isCopied}
           />
 
           {/* Interactive Marquee Status Strip */}
@@ -124,7 +104,7 @@ export const App: React.FC = () => {
           {/* Technical Skills Matrix */}
           <SkillsMatrixSection />
 
-          {/* Contact Section & Dispatch Note */}
+          {/* Contact Section & Gmail Web Dispatch */}
           <ContactSection
             onCopyEmail={handleCopyEmail}
             isCopied={isCopied}
@@ -132,18 +112,11 @@ export const App: React.FC = () => {
         </main>
 
         {/* Editorial Footer */}
-        <Footer onOpenTerminal={() => setIsTerminalOpen(true)} />
-
-        {/* Interactive CLI Terminal Drawer / Modal */}
-        <InteractiveTerminal
-          isOpen={isTerminalOpen}
-          onClose={() => setIsTerminalOpen(false)}
-          onCopyEmail={handleCopyEmail}
-        />
+        <Footer />
 
         {/* Toast Alert Feedback */}
         {toastMessage && (
-          <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#13131c] border border-[#00f0ff]/50 text-white font-mono text-xs shadow-2xl glow-cyan animate-bounce">
+          <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#13131c] border border-[#00f0ff]/50 text-white font-mono text-xs shadow-2xl glow-cyan animate-bounce">
             <span className="w-2 h-2 rounded-full bg-[#0df2c9] animate-pulse" />
             <span>{toastMessage}</span>
           </div>

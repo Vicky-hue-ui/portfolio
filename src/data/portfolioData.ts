@@ -7,9 +7,11 @@ export const PERSONAL_INFO = {
   coordinates: "13.03° N, 77.63° E",
   timezone: "Asia/Kolkata",
   email: "vickyff699@gmail.com",
+  gmailComposeUrl: "https://mail.google.com/mail/?view=cm&fs=1&to=vickyff699@gmail.com&su=Portfolio%20Inquiry%20-%20Vicky%20Samal",
   phone: "+91 8310506391",
   github: "https://github.com/Vicky-hue-ui",
   githubHandle: "@Vicky-hue-ui",
+  photoUrl: "/vicky-samal.jpg",
   availability: {
     status: "Open for Opportunities",
     classes: "Morning BCA Classes (8:00 AM – 1:00 PM IST)",
@@ -32,12 +34,12 @@ export const PERSONAL_INFO = {
 };
 
 export const STATUS_PILLS = [
-  { label: "Status", text: "In my terminal: MERN + ML", code: "‹DEV/›" },
-  { label: "Availability", text: "Open for Night Shifts & Remote", code: "0100" },
-  { label: "College", text: "BCA @ Aditya IMS, Bengaluru", code: "2024-27" },
-  { label: "Location", text: "Bengaluru, India (IST)", code: "UTC+5:30" },
-  { label: "GitHub", text: "Pushing code @Vicky-hue-ui", code: "git:main" },
-  { label: "Focus", text: "Full-Stack • REST APIs • ML Models", code: "‹API/›" },
+  { label: "Core Stack", text: "Full-Stack MERN + Python ML", code: "‹DEV/›" },
+  { label: "Availability", text: "Open for Night Shifts & Remote Roles", code: "AVAILABLE" },
+  { label: "Academics", text: "BCA @ Aditya IMS, Bengaluru", code: "2024–27" },
+  { label: "Location", text: "Bengaluru, India (IST +5:30)", code: "BLR" },
+  { label: "Direct Mail", text: "Gmail: vickyff699@gmail.com", code: "GMAIL" },
+  { label: "Focus", text: "Scalable Web Architectures & REST APIs", code: "‹API/›" },
 ];
 
 export const PROJECTS: Project[] = [
@@ -79,7 +81,7 @@ export const PROJECTS: Project[] = [
     id: "portfolio-3d",
     title: "Personal 3D Portfolio Website",
     tagline: "High-Performance Interactive 3D Portfolio with WebGL & Editorial Motion",
-    description: "Adrien Quechon-inspired creative developer portfolio featuring Three.js 3D hero stage, 0-100% preloader, binary terminal accents, interactive command drawer, audio feedback, and full mobile optimization.",
+    description: "Adrien Quechon-inspired creative developer portfolio featuring Three.js 3D hero stage with custom holographic avatar core, 0-100% preloader, binary terminal accents, audio feedback, and full mobile optimization.",
     category: "Frontend & APIs",
     tags: ["React.js", "Three.js", "TypeScript", "Tailwind CSS", "WebGL", "Vite"],
     metrics: "60 FPS WebGL rendering with automated low-DPR mobile throttling & 2D fallback",
@@ -87,9 +89,9 @@ export const PROJECTS: Project[] = [
     liveUrl: "https://github.com/Vicky-hue-ui",
     featured: true,
     highlights: [
-      "Designed interactive 3D WebGL core with pointer parallax, particle atmosphere, and touch drag support",
+      "Designed interactive 3D WebGL core with pointer parallax, holographic avatar mesh, and touch drag support",
       "Built lightweight mode toggle ensuring high accessibility on battery-saver and low-spec devices",
-      "Integrated live Bengaluru IST clock badge, one-click email copy with confetti, and interactive CLI"
+      "Integrated live Bengaluru IST clock badge, one-click email copy with confetti, and direct Gmail compose"
     ]
   },
   {
